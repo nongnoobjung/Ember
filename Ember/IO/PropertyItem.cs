@@ -48,7 +48,6 @@ namespace Ember.IO
         /// <summary>
         /// Returns a WPF Element of this type
         /// </summary>
-        /// <returns></returns>
         public UIElement GetElementFromType(object defaultValue)
         {
             Type propertyType = GetType();
@@ -90,6 +89,9 @@ namespace Ember.IO
             return null;
         }
 
+        /// <summary>
+        /// Gets the Type of this Property based on it's <see cref="ValueType"/>
+        /// </summary>
         public new Type GetType()
         {
             return Type.GetType(this.ValueType);
