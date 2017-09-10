@@ -12,26 +12,36 @@ namespace Ember.IO
         /// </summary>
         [JsonRequired]
         public string Name { get; set; }
+
         /// <summary>
         /// Tooltip of this Property
         /// </summary>
         public string Tooltip { get; set; }
+
         /// <summary>
         /// Name of this Property in the config
         /// </summary>
         [JsonRequired]
         public string ConfigName { get; set; }
+
         /// <summary>
         /// Type of the Value of this Property
         /// </summary>
         [JsonRequired]
         public string ValueType { get; set; }
 
-        public PropertyItem(string name, string tooltip, string configName, Type valueType)
+        /// <summary>
+        /// Wheter this Property is recommended
+        /// </summary>
+        [JsonRequired]
+        public bool IsRecommended { get; set; }
+
+        public PropertyItem(string name, string tooltip, string configName, bool isRecommended, Type valueType)
         {
             this.Name = name;
             this.Tooltip = tooltip;
             this.ConfigName = configName;
+            this.IsRecommended = isRecommended;
             this.ValueType = valueType.ToString();
         }
 
