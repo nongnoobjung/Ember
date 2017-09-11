@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ember"
         mc:Ignorable="d"
-        Title="Ember" Height="350" Width="525" Icon="icon.ico">
+        Title="Ember" Height="350" Width="540" Icon="icon.ico">
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <TabControl>
+        <StackPanel Orientation="Horizontal">
+            <TabControl MinWidth="430">
                 <TabItem Header="Game Client">
                     <Grid>
                         <StackPanel x:Name="stackPropertyGroups"/>
@@ -19,7 +19,18 @@
 
                 </TabItem>
             </TabControl>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Button x:Name="buttonInstall" Content="Install" Margin="0, 0, 0, 5" ToolTip="Installs the currentlly selected settings" Click="buttonInstall_Click"/>
+                    <Button x:Name="buttonUninstall" Content="Uninstall" Margin="0, 0, 0, 5" ToolTip="Uninstalls the currently installed settings" Click="buttonUninstall_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Button x:Name="buttonRecommended" Content="Recommended" Margin="0, 0, 0, 5" ToolTip="Selects the recommended settings to install" Click="buttonRecommended_Click"/>
+                    <Button x:Name="buttonDeleteLogs" Content="Delete Logs" Margin="0, 0, 0, 5" ToolTip="Deletes useless game logs to free up memory" Click="buttonDeleteLogs_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10, 150">
+                    <Button x:Name="buttomAbout" Content="About" ToolTip="Shows you information about this software" Click="buttomAbout_Click"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>

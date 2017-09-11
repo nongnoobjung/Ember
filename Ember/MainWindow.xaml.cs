@@ -101,7 +101,7 @@ namespace Ember
                         {
                             lolPath = GetLeaguePathFromBrowser();
 
-                            if(lolPath == null)
+                            if (lolPath == null)
                             {
                                 MessageBox.Show("This is not a valid League of Legends folder", "Invalid League of Legends folder", MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
@@ -163,10 +163,10 @@ namespace Ember
                     }
                 }
 
-                stackPropertyGroups.Children.Add(currentSection);
+                this.stackPropertyGroups.Children.Add(currentSection);
             }
 
-            if(areMissingProperties)
+            if (areMissingProperties)
             {
                 MessageBox.Show(missingProperties, "Properties could not be found", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -212,6 +212,103 @@ namespace Ember
             }
 
             return null;
+        }
+
+        private void buttomAbout_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aboutWindow = new AboutWindow();
+            aboutWindow.Show();
+        }
+
+        private void buttonDeleteLogs_Click(object sender, RoutedEventArgs e)
+        {
+            if (Directory.Exists((this.Config["lolpath"] as string) + "//Logs"))
+            {
+                Directory.Delete((this.Config["lolpath"] as string) + "//Logs", true);
+            }
+
+            MessageBox.Show("Your League of Legends logs were successfully deleted", "League of Legends Deleted Logs", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void buttonRecommended_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (FrameworkElement section in this.stackPropertyGroups.Children)
+            {
+                foreach (FrameworkElement property in ((section as GroupBox).Content as StackPanel).Children)
+                {
+                    if (property is CheckBox)
+                    {
+                        bool isRecommended = this.Properties[section.Name].Find(x => x.ConfigName == property.Name).IsRecommended;
+                        (property as CheckBox).IsChecked = isRecommended;
+                    }
+                }
+            }
+        }
+
+        private void buttonInstall_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult messageBoxResult = MessageBoxResult.Yes;
+
+            if (!File.Exists(this.Config["lolpath"] + "//Config//game.cfg"))
+            {
+                messageBoxResult = MessageBox.Show("League of Legends config couldn't be found.\r\nIf you install then no backup will be availible\r\nDo you want to install anyways ?", "League of Legends Config not found", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            }
+
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                foreach (FrameworkElement section in this.stackPropertyGroups.Children)
+                {
+                    foreach (FrameworkElement property in ((section as GroupBox).Content as StackPanel).Children)
+                    {
+                        if (property is CheckBox)
+                        {
+                            this.GameConfig.Entries[section.Name][property.Name] = ((CheckBox)property as CheckBox).IsChecked.Value ? "1" : "0";
+                        }
+                        else
+                        {
+
+                            this.GameConfig.Entries[section.Name][property.Name] = ((property as StackPanel).Children[1] as TextBox).Text;
+                        }
+                    }
+                }
+
+                if (!Directory.Exists("backup"))
+                {
+                    Directory.CreateDirectory("backup");
+                }
+
+                if (File.Exists("backup//game.cfg"))
+                {
+                    File.Delete("backup//game.cfg");
+                }
+                File.Copy(this.Config["lolpath"] + "//Config//game.cfg", "backup//game.cfg");
+                this.GameConfig.Write(this.Config["lolpath"] + "//Config//game.cfg");
+
+                MessageBox.Show("Installation Successfull!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void buttonUninstall_Click(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists("backup//game.cfg"))
+            {
+                MessageBoxResult result = MessageBox.Show("It seems like your Config backup couldn't be found\r\nDo you want to delete your config instead and let the game create a default one ?", "Config Not Found", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    if (File.Exists(this.Config["lolpath"] + "//Config//game.cfg"))
+                    {
+                        File.Delete(this.Config["lolpath"] + "//Config//game.cfg");
+                    }
+                }
+            }
+            else
+            {
+                File.Delete(this.Config["lolpath"] + "//Config//game.cfg");
+                File.Copy("backup//game.cfg", this.Config["lolpath"] + "//Config//game.cfg");
+
+                MessageBox.Show("Uninstallation Successfull!", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }

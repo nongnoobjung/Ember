@@ -33,7 +33,6 @@ namespace Ember.IO
         /// <summary>
         /// Wheter this Property is recommended
         /// </summary>
-        [JsonRequired]
         public bool IsRecommended { get; set; }
 
         public PropertyItem(string name, string tooltip, string configName, bool isRecommended, Type valueType)
